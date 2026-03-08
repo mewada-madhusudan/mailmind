@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MiraMind - Professional Email Client</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eebd2b", // Custom Gold from Theme
+                        "sidebar-bg": "#1a160f", // Deep Charcoal Brown
+                        "background-light": "#1a160f",
+                        "background-dark": "#12100a", // Near black
+                        "tan-muted": "#2a251b",
+                        "border-accent": "#eebd2b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(238, 189, 43, 0.1);
+        }
+
+        .active-sidebar {
+            background-color: rgba(238, 189, 43, 0.15);
+            color: #eebd2b;
+        }
+
+        .email-list-item:hover {
+            background-color: #231e10;
+        }
+
+        .email-list-active {
+            background-color: #231e10;
+            border-left: 4px solid #eebd2b;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 overflow-hidden font-display">
+<div class="flex h-screen w-full">
+    <!-- Left Sidebar: Dark Chocolate Brown -->
+    <aside class="w-64 bg-sidebar-bg flex flex-col justify-between py-6 shrink-0 text-slate-300">
+        <div class="flex flex-col gap-8 px-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 px-2">
+                <div class="size-10 bg-primary rounded-lg flex items-center justify-center text-sidebar-bg">
+                    <span class="material-symbols-outlined font-bold">psychology</span>
+                </div>
+                <h1 class="text-white text-xl font-bold tracking-tight">MiraMind</h1>
+            </div>
+            <!-- Main Navigation -->
+            <nav class="flex flex-col gap-1">
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg active-sidebar cursor-pointer group">
+                    <span class="material-symbols-outlined">mail</span>
+                    <p class="text-sm font-semibold">Mail</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined">rule</span>
+                    <p class="text-sm font-medium">Rules</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined">find_in_page</span>
+                    <p class="text-sm font-medium">Results</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <p class="text-sm font-medium">Analytics</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined">settings</span>
+                    <p class="text-sm font-medium">Settings</p>
+                </div>
+            </nav>
+            <!-- Dynamic Folders -->
+            <div class="flex flex-col gap-1 mt-4">
+                <h3 class="px-3 text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">Folders</h3>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">archive</span>
+                    <p class="text-sm font-medium">Archive</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">drafts</span>
+                    <p class="text-sm font-medium">Drafts</p>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">send</span>
+                    <p class="text-sm font-medium">Sent Items</p>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Sidebar Actions -->
+        <div class="px-4 flex flex-col gap-2">
+            <div class="flex items-center gap-3 px-3 py-4 border-t border-white/10 mt-4">
+                <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="User profile avatar portrait"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgI9TkE4L_Xsw02LTc-JHJQsdiq5a9x92l__n7d-hb65L1-FPYzvlb0bCaIY_pD9hJQQ7WoL6l2RyEHvaPIgcRJpVXwu85QlZHNQy2ge9PtEPoThul2kYPrdSB9pGDNFGccFZTO8utbcXEsxTdWhbD0VyAg8hX0fEYIaBH7odBF2RRtrp_HiMZJM71AYBhSbbcqM4W9QKZBci8UWb1owC19iT_6MlZleHr9_baHD6Mvhxa-J27-wcc_B64-LEq7WumqFXGSQg_G2E"/>
+                </div>
+                <div class="flex flex-col">
+                    <p class="text-xs font-bold text-white">I811963</p>
+                    <p class="text-[10px] text-slate-400">Pro Account</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                <span class="material-symbols-outlined text-sm">logout</span>
+                <p class="text-sm font-medium">Logout</p>
+            </div>
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg sidebar-item cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-sm">dark_mode</span>
+                    <p class="text-sm font-medium">Dark Mode</p>
+                </div>
+                <div class="w-8 h-4 bg-primary rounded-full relative">
+                    <div class="absolute right-1 top-1 size-2 bg-sidebar-bg rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0">
+        <!-- Top Header (Fixed) -->
+        <header class="h-16 border-b border-tan-muted px-8 flex items-center justify-end bg-background-dark z-10 shrink-0">
+            <div class="flex items-center gap-3">
+                <button class="bg-primary hover:opacity-90 text-background-dark px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors">
+                    <span class="material-symbols-outlined text-lg">sync</span>
+                    Sync
+                </button>
+                <button class="bg-tan-muted border border-white/5 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-sm text-slate-200">
+                    <span class="size-2 bg-green-500 rounded-full"></span>
+                    Connected
+                </button>
+            </div>
+        </header>
+        <!-- Layout Body: List + Reading Pane -->
+        <div class="flex flex-1 min-h-0">
+            <!-- Email List Pane: Warm Light Tan -->
+            <section class="w-[400px] border-r border-primary/10 bg-primary/5 flex flex-col h-full">
+                <!-- Action Bar -->
+                <div class="p-2 border-b border-primary/10 grid gap-1 grid-cols-7">
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">check_box</span>
+                        <span class="text-[10px] font-bold">All</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">mark_email_unread</span>
+                        <span class="text-[10px] font-bold">Unread</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">drafts</span>
+                        <span class="text-[10px] font-bold">Read</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">flag</span>
+                        <span class="text-[10px] font-bold">Flag</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">drive_file_move</span>
+                        <span class="text-[10px] font-bold">Move</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                        <span class="text-[10px] font-bold">Delete</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-1 hover:bg-primary/10 rounded transition-colors text-slate-700 dark:text-slate-300">
+                        <span class="material-symbols-outlined text-lg">category</span>
+                        <span class="text-[10px] font-bold">Classify</span>
+                    </button>
+                </div>
+                <!-- List Content -->
+                <div class="flex-1 overflow-y-auto scrollbar-hide">
+                    <!-- Active Item -->
+                    <div class="p-4 border-b border-primary/10 bg-white dark:bg-background-dark/50 border-l-4 border-l-primary flex gap-3 group relative cursor-pointer">
+                        <div class="flex-shrink-0 pt-1">
+                            <input checked="" class="rounded border-primary/30 text-primary focus:ring-primary h-4 w-4"
+                                   type="checkbox"/>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">ServiceNow Admin</span>
+                                <span class="text-[10px] font-bold text-primary whitespace-nowrap">10:45 AM</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">ServiceNow Production
+                                Environment Upgrade to Zurich</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-1">Hello Team, we are pleased
+                                to announce the scheduled upgrade for our production environment...</p>
+                        </div>
+                    </div>
+                    <!-- Other Items -->
+                    <div class="p-4 border-b border-primary/5 hover:bg-primary/10 flex gap-3 group cursor-pointer transition-colors">
+                        <div class="flex-shrink-0 pt-1">
+                            <input class="rounded border-primary/30 text-primary focus:ring-primary h-4 w-4"
+                                   type="checkbox"/>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 truncate">Human Resources</span>
+                                <span class="text-[10px] text-slate-400 whitespace-nowrap">Yesterday</span>
+                            </div>
+                            <h4 class="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">Benefits Enrollment
+                                Window Opening</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-1">Please review the updated
+                                medical plans for the 2024 calendar year attached below...</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-b border-primary/5 hover:bg-primary/10 flex gap-3 group cursor-pointer transition-colors">
+                        <div class="flex-shrink-0 pt-1">
+                            <input class="rounded border-primary/30 text-primary focus:ring-primary h-4 w-4"
+                                   type="checkbox"/>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 truncate">IT Security Ops</span>
+                                <span class="text-[10px] text-slate-400 whitespace-nowrap">Oct 24</span>
+                            </div>
+                            <h4 class="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">[URGENT] Required
+                                Security Patch Installation</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-1">All employees must restart
+                                their machines to apply the latest security updates...</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-b border-primary/5 hover:bg-primary/10 flex gap-3 group cursor-pointer transition-colors">
+                        <div class="flex-shrink-0 pt-1">
+                            <input class="rounded border-primary/30 text-primary focus:ring-primary h-4 w-4"
+                                   type="checkbox"/>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 truncate">JIRA Notifications</span>
+                                <span class="text-[10px] text-slate-400 whitespace-nowrap">Oct 23</span>
+                            </div>
+                            <h4 class="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">MM-402: UI
+                                Components Refactor needed</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-1">John Doe commented: "Please
+                                check the primary color contrast on the sidebar elements."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Reading Pane: Pure White -->
+            <section class="flex-1 bg-background-dark overflow-y-auto flex flex-col">
+                <!-- Email Content Container -->
+                <div class="p-10 max-w-4xl">
+                    <!-- Email Header -->
+                    <div class="mb-10">
+                        <h1 class="text-3xl font-bold text-slate-100 leading-tight mb-6">ServiceNow Production
+                            Environment Upgrade to Zurich</h1>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="size-12 rounded-full bg-tan-muted flex items-center justify-center font-bold text-primary border border-white/5">
+                                    SA
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-bold text-slate-100">ServiceNow Admin</span>
+                                        <span class="text-xs text-slate-500">&lt;admin@servicenow.internal&gt;</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">To: MiraMind Internal
+                                        &lt;i811963@miramind.com&gt;</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">October 25,
+                                    2023</p>
+                                <p class="text-xs text-slate-400">10:42 AM (2 hours ago)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Email Body -->
+                    <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-6 text-base">
+                        <p class="text-slate-300">Hello MiraMind Team,</p>
+                        <p class="text-slate-300">We are pleased to announce that the migration of our ServiceNow
+                            Production environment to the latest <strong class="text-slate-100">"Zurich"</strong>
+                            release has been scheduled for this upcoming weekend. This upgrade includes significant
+                            performance enhancements and new AI-driven classification features that MiraMind users have
+                            been requesting.</p>
+                        <div class="bg-tan-muted p-6 rounded-xl border border-white/5 my-8">
+                            <h4 class="font-bold text-slate-100 mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">event_available</span>
+                                Maintenance Window Details
+                            </h4>
+                            <ul class="space-y-2 text-sm text-slate-300">
+                                <li class="flex justify-between"><span class="font-medium">Start:</span> <span>Saturday, Oct 28 - 22:00 UTC</span>
+                                </li>
+                                <li class="flex justify-between"><span class="font-medium">End:</span> <span>Sunday, Oct 29 - 04:00 UTC</span>
+                                </li>
+                                <li class="flex justify-between"><span class="font-medium">Service Impact:</span> <span
+                                        class="text-primary font-bold">Partial Downtime Expected</span></li>
+                            </ul>
+                        </div>
+                        <p class="text-slate-300">Key features of the Zurich release include:</p>
+                        <ul class="list-disc pl-5 space-y-2 text-slate-300">
+                            <li>Enhanced API throughput for third-party integrations.</li>
+                            <li>Refined UI components for better accessibility.</li>
+                            <li>Updated security protocols for data encryption at rest.</li>
+                            <li>New 'Smart Route' logic for incoming support tickets.</li>
+                        </ul>
+                        <p class="text-slate-300">Please ensure that all pending changes are committed before the
+                            maintenance window begins. If you encounter any critical issues post-upgrade, please report
+                            them directly via the <strong class="text-primary">#it-emergency</strong> Slack channel or
+                            open a high-priority ticket through the backup portal.</p>
+                        <p class="text-slate-300">Best Regards,<br/>
+                            <span class="font-bold text-slate-100">ServiceNow Administration Team</span><br/>
+                            <span class="text-sm text-slate-500 italic">Enterprise IT Operations</span></p>
+                    </div>
+                    <!-- Attachments Section -->
+                    <div class="mt-12 pt-8 border-t border-tan-muted">
+                        <h5 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Attachments (1)</h5>
+                        <div class="flex items-center gap-3 p-3 border border-tan-muted rounded-lg w-fit hover:bg-tan-muted transition-colors cursor-pointer">
+                            <span class="material-symbols-outlined text-primary">description</span>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-slate-200">Zurich_Release_Notes.pdf</span>
+                                <span class="text-[10px] text-slate-500">2.4 MB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>
