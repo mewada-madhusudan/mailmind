@@ -1,0 +1,94 @@
+<%@ Page Language="C#" Async="true" %>
+<%@ Import Namespace="System.Net.Http" %>
+<%@ Import Namespace="System.Net.Http.Headers" %>
+<%@ Import Namespace="System.Threading.Tasks" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
+
+<script runat="server">
+protected async void Page_Load(object sender, EventArgs e)
+{
+    // Handle preflight CORS
+    Response.Headers.Add("Access-Control-Allow-Origin", "https://yourcompany.sharepoint.com");
+    Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+    
+    if (Request.HttpMethod == "OPTIONS")
+    {
+        Response.StatusCode = 200;
+        Response.End();
+        return;
+    }
+
+    string service = Request.QueryString["service"]; // service1 or service2
+    
+    // Config for each service
+    var configs = new Dictionary<string, dynamic>
+    {
+        ["service1"] = new {
+            resource_id = "SERVICE1_RESOURCE_ID",
+            client_id = "SERVICE1_CLIENT_ID"
+        },
+        ["service2"] = new {
+            resource_id = "SERVICE2_RESOURCE_ID",
+            client_id = "SERVICE2_CLIENT_ID"
+        }
+    };
+
+    if (!configs.ContainsKey(service))
+    {
+        Response.StatusCode = 400;
+        Response.Write("{\"error\": \"Invalid service\"}");
+        Response.End();
+        return;
+    }
+
+    var config = configs[service];
+
+    try
+    {
+        using (var client = new HttpClient())
+        {
+            // Use Windows credentials automatically — Kerberos!
+            var handler = new HttpClientHandler()
+            {
+                UseDefaultCredentials = true  // 👈 auto uses Windows/Kerberos creds
+            };
+            
+            var authClient = new HttpClient(handler);
+
+            // Call Idaho with service account
+            var payload = new
+            {
+                username = System.Configuration.ConfigurationManager
+                    .AppSettings["IdahoUser"],        // store in web.config
+                password = System.Configuration.ConfigurationManager
+                    .AppSettings["IdahoPass"],        // store in web.config
+                resource_id = config.resource_id,
+                client_id = config.client_id,
+                auth_type = "password"
+            };
+
+            var json = JsonConvert.SerializeObject(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await authClient.PostAsync(
+                "https://idaho.company.com/endpoint",
+                content
+            );
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            Response.ContentType = "application/json";
+            Response.Write(result);
+        }
+    }
+    catch (Exception ex)
+    {
+        Response.StatusCode = 500;
+        Response.Write($"{{\"error\": \"{ex.Message}\"}}");
+    }
+    
+    Response.End();
+}
+</script>
