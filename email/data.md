@@ -1,258 +1,143 @@
-📄 Product Requirements Document (PRD)
-Project: Email Manager v2 (Modernized)
-1. 🧭 Overview
-Objective
+You are a senior full-stack engineer.
 
-Migrate the existing Email Manager (PyQt + Excel-based mapping) into a modern system with:
+I have an existing Python PyQt5-based desktop tool called "Email Manager" which:
+- Uses Excel as a config (3 sheets: Draft, Track, Download)
+- Performs:
+  - Email drafting/sending via Outlook
+  - Tracking responses
+  - Downloading attachments
+  - Find/Replace dynamic content in emails
 
-React frontend
-FastAPI backend
-JSON-based configuration (import/export)
-Job scheduling (draft, track, download)
-Reduced manual effort through automation
-2. 🧱 Current System (Reference)
-Existing Stack
-UI: PyQt5
-Config: Excel (3 sheets)
-Draft
-Track
-Download
-Draft Sheet Fields (important for migration)
-Process Name
-Subject Line
-Need to Process Y/N
-TO / CC stakeholders
-Attachment Folder Path
-Attachment File Name
-Shared Mailbox
-Log Output Path
-Email Body Excel/Docx
-Reminder Email Body Path
-Draft/Send
-Find_One → Replace_Five
-3. 🎯 Goals
-Functional Goals
-Replace Excel config with JSON
-Provide UI to create/edit jobs
-Support:
-Draft emails
-Track responses
-Download attachments
-Add scheduling (daily/cron-like)
-Add logging & monitoring
-Non-Goals (for v1)
-Multi-user authentication
-Cloud deployment
-Database (use JSON only)
-4. 🏗️ Target Architecture
-Frontend
-React (with Vite or Next.js)
-UI library: Material UI / Ant Design
-Backend
-FastAPI
-APScheduler (job scheduling)
-Storage
-JSON file (config)
-File-based logs
-5. 📁 Data Model (JSON आधारित)
-File: config.json
+I want you to MODERNIZE this system using:
+
+Frontend:
+- React (simple, clean UI)
+
+Backend:
+- FastAPI (Python)
+
+Storage:
+- JSON file (NO database)
+
+Scheduler:
+- APScheduler
+
+---
+
+IMPORTANT INSTRUCTIONS:
+
+1. You MUST reuse existing logic from my old PyQt code:
+   - Email sending
+   - Outlook integration
+   - Attachment handling
+   - Find/Replace logic
+
+2. DO NOT rewrite business logic from scratch if it exists.
+
+3. Replace:
+   - Excel config → JSON config
+   - UI logic → API endpoints
+
+---
+
+SYSTEM REQUIREMENTS:
+
+### Features:
+- Create/Edit/Delete Jobs
+- Run job manually
+- Schedule jobs (daily)
+- Track responses
+- Download attachments
+- Logging per job
+
+---
+
+### JSON Structure:
+
+Use this format:
 {
   "version": "1.0",
   "jobs": [
     {
       "id": "job_001",
-      "process_name": "string",
-      "subject": "string",
-
+      "process_name": "",
+      "subject": "",
       "recipients": {
-        "to": ["string"],
-        "cc": ["string"]
+        "to": [],
+        "cc": []
       },
-
-      "mailbox": "string",
-      "shared_mailbox": "string",
-
       "attachments": {
-        "folder_path": "string",
-        "file_name": "string"
+        "folder_path": "",
+        "file_name": ""
       },
-
       "content": {
-        "body_template_path": "string",
-        "reminder_template_path": "string"
+        "body_template_path": "",
+        "reminder_template_path": ""
       },
-
-      "find_replace": [
-        {
-          "find": "string",
-          "replace": "string",
-          "order": 1
-        }
-      ],
-
+      "find_replace": [],
       "actions": {
         "draft": true,
         "track": true,
         "download": false,
         "send": false
       },
-
       "schedule": {
         "enabled": true,
         "type": "daily",
         "time": "10:00"
-      },
-
-      "metadata": {
-        "created_at": "",
-        "last_run": "",
-        "status": "idle"
       }
     }
   ]
 }
-6. ⚙️ Backend Requirements (FastAPI)
-6.1 API Endpoints
-Config APIs
-GET /jobs → list all jobs
-POST /jobs → create job
-PUT /jobs/{id} → update job
-DELETE /jobs/{id} → delete job
-Import/Export
-POST /import-config → upload JSON
-GET /export-config → download JSON
-Execution APIs
-POST /jobs/{id}/run → run job manually
-GET /jobs/{id}/logs → fetch logs
-6.2 Scheduler
 
-Use APScheduler
+---
 
-Behavior:
-On backend startup:
-Load config.json
-Register all scheduled jobs
-Supported:
-Daily run
-Future: cron expressions
-6.3 Core Logic (Reuse from PyQt code)
+### Backend Requirements:
+- FastAPI app
+- APIs:
+  - GET /jobs
+  - POST /jobs
+  - PUT /jobs/{id}
+  - DELETE /jobs/{id}
+  - POST /jobs/{id}/run
+- APScheduler integration
+- JSON read/write handler
+- Services:
+  - email_service
+  - tracking_service
+  - download_service
 
-Claude should:
+---
 
-Extract logic from existing PyQt code for:
-Email drafting
-Outlook integration
-Attachment handling
-Find/Replace logic
-Refactor into backend services:
-email_service.py
-tracking_service.py
-download_service.py
-7. 🎨 Frontend Requirements (React)
-7.1 Pages
-1. Dashboard
-List all jobs
-Status:
-Active / Scheduled / Failed
-Buttons:
-Run
-Edit
-Delete
-2. Create / Edit Job Form
+### Frontend Requirements:
+- Dashboard (list jobs)
+- Job Form (create/edit)
+- Logs Viewer
+- Import/Export JSON
 
-Fields:
+---
 
-Process Name
-Subject
-TO / CC (multi-input)
-Mailbox / Shared Mailbox
-Attachment path picker
-Template file selector
-Find/Replace dynamic rows
-Actions (checkboxes)
-Schedule (time picker)
-3. Logs Viewer
-Show execution history
-Filter by job
-4. Import / Export
-Upload JSON
-Download JSON
-8. 🔁 Functional Flows
-8.1 Create Job
-User fills form
-Frontend sends JSON to backend
-Backend validates
-Saves to config.json
-8.2 Run Job
-User clicks "Run"
-Backend:
-Applies find/replace
-Drafts or sends email
-Logs result
-8.3 Scheduled Run
-Scheduler triggers job
-Same flow as manual run
-8.4 Tracking
-Check mailbox
-Identify replies
-Update logs
-8.5 Download
-Download attachments from responses
-Save to folder
-9. 📜 Logging
-File-based logging:
-logs/{job_id}.log
+### Folder Structure:
+Follow the structure in the attached markdown file.
 
-Each entry:
+---
 
-timestamp | status | message
-10. ⚠️ Validation Rules
-Process Name required
-At least one TO recipient
-Valid file paths
-Unique job ID
-Schedule format valid
-11. 🔐 Error Handling
-Fail job gracefully
-Log errors
-Show error in UI
-12. 🔄 Migration Requirement (IMPORTANT)
+### Deliverables:
+1. Complete backend code (modular)
+2. Complete React frontend
+3. Integration between frontend and backend
+4. Scheduler working
+5. Logging system
 
-Claude MUST:
+---
 
-Analyze existing PyQt code
-Extract reusable logic
-DO NOT rewrite email logic from scratch
-Convert:
-Excel reading → JSON parsing
-UI logic → API endpoints
-13. 📦 Deliverables Expected from Claude
-Backend
-FastAPI app
-Scheduler integration
-JSON config handler
-Services (email, tracking, download)
-Frontend
-React app
-Forms + dashboard
-API integration
-14. 🚀 Future Scope (Do NOT implement now)
-Database (PostgreSQL)
-User authentication
-Role-based access
-Email analytics dashboard
-15. 🧠 Instructions for Claude (IMPORTANT)
-Use existing code as base for logic
-Do NOT over-engineer
-Keep config JSON-based
-Ensure modular structure
-Keep UI simple but functional
-Focus on maintainability
-✅ Summary
+### Constraints:
+- Keep it simple (no overengineering)
+- No database
+- Code should be clean and modular
+- Easy to extend later
 
-This system should:
+---
 
-Remove Excel dependency
-Reduce manual operations
-Add scheduling
-Be extensible in future
+Now I will provide my existing PyQt code.
+Analyze it and start building the new system accordingly.
